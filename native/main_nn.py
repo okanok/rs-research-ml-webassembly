@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
-import io
-import requests
-import time
+import datetime
 from pandas.compat import StringIO
 np.random.seed(42)
+
 TESTDATA = StringIO("""
 ,fixed acidity,volatile acidity,citric acid,residual sugar,chlorides,free sulfur dioxide,total sulfur dioxide,density,pH,sulphates,alcohol,quality
 0,7.0,0.27,0.36,20.7,0.045,45.0,170.0,1.001,3.0,0.45,8.8,6
@@ -5001,8 +5000,8 @@ def grad_softmax_crossentropy_with_logits(logits,reference_answers):
 
 def load_dataset(flatten=False):
     # url="http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"
-    # data=pd.read_csv(pyodide.open_url(url), sep=";")
     data=pd.read_csv(TESTDATA, sep=",")
+    
     # normalize data
     result = data.copy()
     for feature_name in data.columns:
@@ -5099,7 +5098,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 totalTime = 0
 runTimes = 10
 for i in range(runTimes):
-    startTime = time.time()
+    startTime = np.datetime64(datetime.datetime.now())
     for epoch in range(25):
         for x_batch,y_batch in iterate_minibatches(X_train,y_train,batchsize=32,shuffle=True):
             train(network,x_batch,y_batch)
@@ -5110,9 +5109,9 @@ for i in range(runTimes):
         # print("Train accuracy:",train_log[-1])
         # print("Val accuracy:",val_log[-1])
         
-    endTime = time.time()
-    trainTime = round(round(endTime-startTime,4)*1000)
+    endTime = np.datetime64(datetime.datetime.now())
+    trainTime = round((endTime-startTime) / np.timedelta64(1, 'ms'))
     print(trainTime)
     totalTime += trainTime
 
-print("Avg train time: ", totalTime / runTimes)
+print("Avg train time: ", totalTime / runTimes, " milliseconds.")

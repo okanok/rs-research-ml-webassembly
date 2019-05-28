@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-# import time
+import datetime
 from pandas.compat import StringIO
 np.random.seed(42)
 TESTDATA = StringIO("""
@@ -5097,7 +5097,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 totalTime = 0
 runTimes = 10
 for i in range(runTimes):
-    # startTime = time.time()
+    startTime = np.datetime64(datetime.datetime.now())
     for epoch in range(25):
         for x_batch,y_batch in iterate_minibatches(X_train,y_train,batchsize=32,shuffle=True):
             train(network,x_batch,y_batch)
@@ -5108,9 +5108,7 @@ for i in range(runTimes):
         # print("Train accuracy:",train_log[-1])
         # print("Val accuracy:",val_log[-1])
         
-    # endTime = time.time()
-    # trainTime = round(round(endTime-startTime,4)*1000)
-    # print(trainTime)
-    # totalTime += trainTime
-
-print("Avg train time: ", totalTime / runTimes)
+    endTime = np.datetime64(datetime.datetime.now())
+    trainTime = round((endTime-startTime) / np.timedelta64(1, 'ms'))
+    totalTime += trainTime
+totalTime/runTimes
