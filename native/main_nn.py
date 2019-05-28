@@ -5000,7 +5000,11 @@ def grad_softmax_crossentropy_with_logits(logits,reference_answers):
 
 def load_dataset(flatten=False):
     # url="http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"
+    startTime = np.datetime64(datetime.datetime.now())
     data=pd.read_csv(TESTDATA, sep=",")
+    endTime = np.datetime64(datetime.datetime.now())
+    trainTime = round((endTime-startTime) / np.timedelta64(1, 'ms'))
+    print(trainTime)
     
     # normalize data
     result = data.copy()
@@ -5095,23 +5099,23 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
             excerpt = slice(start_idx, start_idx + batchsize)
         yield inputs[excerpt], targets[excerpt]
 
-totalTime = 0
-runTimes = 10
-for i in range(runTimes):
-    startTime = np.datetime64(datetime.datetime.now())
-    for epoch in range(25):
-        for x_batch,y_batch in iterate_minibatches(X_train,y_train,batchsize=32,shuffle=True):
-            train(network,x_batch,y_batch)
-        ##commented because we want to measure the performance of the training only!
-        # train_log.append(np.mean(predict(network,X_train)==y_train))
-        # val_log.append(np.mean(predict(network,X_val)==y_val))
-        # print("Epoch",epoch)
-        # print("Train accuracy:",train_log[-1])
-        # print("Val accuracy:",val_log[-1])
+# totalTime = 0
+# runTimes = 10
+# for i in range(runTimes):
+#     startTime = np.datetime64(datetime.datetime.now())
+#     for epoch in range(25):
+#         for x_batch,y_batch in iterate_minibatches(X_train,y_train,batchsize=32,shuffle=True):
+#             train(network,x_batch,y_batch)
+#         ##commented because we want to measure the performance of the training only!
+#         # train_log.append(np.mean(predict(network,X_train)==y_train))
+#         # val_log.append(np.mean(predict(network,X_val)==y_val))
+#         # print("Epoch",epoch)
+#         # print("Train accuracy:",train_log[-1])
+#         # print("Val accuracy:",val_log[-1])
         
-    endTime = np.datetime64(datetime.datetime.now())
-    trainTime = round((endTime-startTime) / np.timedelta64(1, 'ms'))
-    print(trainTime)
-    totalTime += trainTime
+#     endTime = np.datetime64(datetime.datetime.now())
+#     trainTime = round((endTime-startTime) / np.timedelta64(1, 'ms'))
+#     print(trainTime)
+#     totalTime += trainTime
 
-print("Avg train time: ", totalTime / runTimes, " milliseconds.")
+# print("Avg train time: ", totalTime / runTimes, " milliseconds.")

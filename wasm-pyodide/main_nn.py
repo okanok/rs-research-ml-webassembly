@@ -4997,10 +4997,24 @@ def grad_softmax_crossentropy_with_logits(logits,reference_answers):
     softmax = np.exp(logits) / np.exp(logits).sum(axis=-1,keepdims=True)
     return (- ones_for_answers + softmax) / logits.shape[0]
 
+# Uncomment next lines to time to read string into Pandas DataFrame. Dont forget to comment everything else
+# def load_dataset(flatten=False):
+#     startTime = np.datetime64(datetime.datetime.now())
+#     data=pd.read_csv(TESTDATA, sep=",")
+#     endTime = np.datetime64(datetime.datetime.now())
+#     trainTime = round((endTime-startTime) / np.timedelta64(1, 'ms'))
+#     return trainTime
+    
+
+# a = load_dataset(flatten=True)
+# a
+
 def load_dataset(flatten=False):
     # url="http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"
     # data=pd.read_csv(pyodide.open_url(url), sep=";")
+
     data=pd.read_csv(TESTDATA, sep=",")
+
     # normalize data
     result = data.copy()
     for feature_name in data.columns:
